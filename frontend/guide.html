@@ -1,0 +1,291 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>VeriLedger V2 Beginner Handbook</title><style>
+*{box-sizing:border-box}body{margin:0;color:#21384b;background:#f6f8fa;font:16px/1.95 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}header{background:#132d43;color:#fff;padding:22px max(22px,calc((100% - 1100px)/2));display:flex;justify-content:space-between;gap:20px}header a{color:#a3e0d0}main{max-width:1100px;margin:30px auto;display:grid;grid-template-columns:215px minmax(0,1fr);gap:28px;padding:0 22px}nav{position:sticky;top:25px;align-self:start}nav strong{display:block;margin-bottom:10px}nav a{display:block;font-size:14px;padding:6px 0;color:#508275;text-decoration:none}article{background:#fff;border:1px solid #e0e7ec;border-radius:10px;padding:32px;min-width:0}h1{font-size:28px;line-height:1.6;margin:0 0 22px;color:#142e43}h2{font-size:23px;margin:40px 0 18px;line-height:1.7;color:#142e43}h3{font-size:18px;margin:26px 0 12px;color:#245a52}p{margin:15px 0;overflow-wrap:anywhere}li{margin:9px 0}code{font-size:14px;overflow-wrap:anywhere;background:#f0f4f6;padding:2px 5px;border-radius:3px}pre{padding:18px;background:#f0f4f6;border-radius:7px;white-space:pre-wrap;word-break:break-all}pre code{padding:0}.table-wrap{overflow:auto}table{border-collapse:collapse;width:100%;font-size:14px}th,td{border:1px solid #dde5e9;padding:10px 12px;text-align:left;vertical-align:top}th{background:#edf4f1}tr:nth-child(even){background:#fafcfd}a{color:#0a7f70}@media(max-width:800px){main{grid-template-columns:1fr;gap:15px}nav{position:static;padding:10px 0}nav a{display:inline-block;margin-right:18px}article{padding:24px 19px}h1{font-size:25px}h2{font-size:21px}header{font-size:14px}}
+</style></head><body><header><strong>VeriLedger V2 · English Beginner Handbook</strong><a href="/">Back to the application</a></header><main><nav aria-label="Handbook contents"><strong>Follow the steps</strong><a href="#section-6">1 Understand what the system checks</a><a href="#section-26">2 Launch the English edition</a><a href="#section-72">3 Try all four verification outcomes</a><a href="#section-114">4 Know the demo accounts</a><a href="#section-129">5 Authorise Institution B</a><a href="#section-145">6 Register a credential as Institution B</a><a href="#section-186">7 Search records and recover verification JSON</a><a href="#section-202">8 Revoke your own credential</a><a href="#section-217">9 Rehearse with a browser wallet</a><a href="#section-277">10 Stop normally and verify persistence</a><a href="#section-293">11 Back up and restore</a><a href="#section-316">12 Reset only when you want a new environment</a><a href="#section-329">13 Troubleshooting</a><a href="#section-348">14 Suggested classroom presentation</a></nav><article><h1 id="section-0">VeriLedger V2 Beginner Handbook</h1>
+<p>This handbook is for students using wallets, smart contracts and local web applications for the first time. Start with classroom demo accounts, then rehearse with an independent browser wallet.</p>
+<p>The English V2 project is in <code>FTEC5520/proj</code>. The Chinese V2 project is in the neighbouring <code>FTEC5520/project</code> folder. Do not mix their launchers, data directories or verification JSON.</p>
+<h2 id="section-6">1 Understand what the system checks</h2>
+<p>Imagine a training provider gives a student a PDF certificate. An employer wants to know whether it is the file that the provider registered and whether the provider later revoked it.</p>
+<p>The system registers a salted file commitment on a local test chain. The verifier selects the PDF and its verification JSON; the browser recalculates the commitment and checks the contract.</p>
+<div class="table-wrap"><table><thead><tr><th>Term</th><th>Meaning</th></tr></thead><tbody>
+<tr><td>Original PDF</td><td>The exact file selected during registration, with its original bytes</td></tr>
+<tr><td>Credential ID</td><td>A unique identifier for the on-chain record, starting with <code>0x</code></td></tr>
+<tr><td>Salt</td><td>A random verification value included in the JSON; it cannot be recovered from the commitment</td></tr>
+<tr><td>Commitment</td><td>The encoded file hash and salt hashed together, then registered on-chain</td></tr>
+<tr><td>Verification JSON</td><td>The accompanying ID, salt and deployment information; it is not the PDF</td></tr>
+<tr><td>Wallet address</td><td>An account identifier starting with <code>0x</code>, not a password</td></tr>
+<tr><td>Wallet signature</td><td>Proof that you control an address; records sign-in is gas-free</td></tr>
+<tr><td>Transaction</td><td>An operation that changes chain state, such as registration or revocation</td></tr>
+<tr><td>Account role</td><td>Administrator or issuer permissions enforced by the contract, separate from signing in</td></tr>
+</tbody></table></div>
+<p><code>VALID</code> means that the file matches and has not been revoked. It does not prove that the training or internship actually happened.</p>
+<h2 id="section-26">2 Launch the English edition</h2>
+<h3 id="section-28">Find the correct folder</h3>
+<p>Open this location in Finder:</p>
+<pre><code>/Users/garywen/Desktop/CUHK/FTEC5520/proj</code></pre>
+<p>It should contain <code>start.command</code>, <code>check.command</code> and this handbook. Do not launch the neighbouring Chinese edition at the same time; both use the same default ports.</p>
+<h3 id="section-38">Start the services</h3>
+<p>Double-click <code>start.command</code>. A terminal window opens. The first launch creates the V2 dataset; later launches restore it.</p>
+<p>Wait for these messages:</p>
+<pre><code>Website: http://127.0.0.1:5173
+Keep this window open. Press Ctrl+C to stop normally and save your data.</code></pre>
+<p>Keep the window running. It runs the website, local records service and blockchain. A window that stays open is expected, not a frozen program.</p>
+<p>If double-clicking does not work, open Terminal and enter these lines:</p>
+<pre><code>cd /Users/garywen/Desktop/CUHK/FTEC5520/proj
+bash start.command</code></pre>
+<p>On another computer, install Node.js 24 LTS, run <code>npm install</code> in the project folder, then launch. On this Mac, the launcher can locate the Node runtime bundled with Codex and the prepared dependencies.</p>
+<h3 id="section-60">Open the website</h3>
+<p>Open this address in Chrome, Edge or another browser:</p>
+<pre><code>http://127.0.0.1:5173/</code></pre>
+<p>Expect the English VeriLedger interface with <strong>Local test chain connected</strong> in the top bar. A fresh dataset has two sample records, one valid and one revoked. Your own registrations and acceptance-test records can make the count larger.</p>
+<p><code>127.0.0.1</code> means your own computer. Opening it on another computer accesses that computer, not this project on your Mac.</p>
+<h2 id="section-72">3 Try all four verification outcomes</h2>
+<h3 id="section-74">Valid sample</h3>
+<ol>
+<li>Open <strong>Verify credentials</strong>.</li>
+<li>Select <strong>Load valid sample</strong> below the form.</li>
+<li>The original PDF, credential ID and salt are filled automatically.</li>
+<li>Select <strong>Verify credential</strong>.</li>
+<li>Expect <code>VALID</code> and <strong>File matches. Credential is valid.</strong></li>
+</ol>
+<p>Expand <strong>View fingerprints and on-chain record</strong> to compare the computed and registered commitments. They should match.</p>
+<h3 id="section-84">Altered PDF</h3>
+<ol>
+<li>Download <strong>PDF with altered dates</strong> from the Classroom samples panel.</li>
+<li>Select <strong>Change file</strong> and choose <code>certificate-altered.pdf</code>.</li>
+<li>Keep the previous credential ID and salt.</li>
+<li>Verify again.</li>
+<li>Expect <code>HASH_MISMATCH</code>.</li>
+</ol>
+<p>The original end date is <code>30 June 2026</code>; the altered date is <code>31 August 2026</code>. Any byte change can affect the fingerprint. An incorrect salt also causes a mismatch, so the status alone does not prove malicious alteration.</p>
+<h3 id="section-94">Revoked credential</h3>
+<ol>
+<li>Select <strong>Load revoked sample</strong>.</li>
+<li>Verify.</li>
+<li>Expect <code>REVOKED</code> and <strong>File matches. Credential is revoked.</strong></li>
+</ol>
+<p>The file still matches, but the credential has been withdrawn. Revocation preserves the original registration.</p>
+<h3 id="section-102">Unknown credential</h3>
+<ol>
+<li>Keep a PDF and salt selected.</li>
+<li>Replace the credential ID with this complete line:</li>
+</ol>
+<pre><code>0x0000000000000000000000000000000000000000000000000000000000000000</code></pre>
+<ol>
+<li>Verify.</li>
+<li>Expect <code>NOT_FOUND</code>.</li>
+</ol>
+<h2 id="section-114">4 Know the demo accounts</h2>
+<p>The acting-account controls appear in <strong>Issuer workspace</strong>, <strong>Credential records</strong> and <strong>Administration</strong>.</p>
+<div class="table-wrap"><table><thead><tr><th>Account</th><th>Initial purpose</th></tr></thead><tbody>
+<tr><td>Administrator</td><td>Authorises issuers, records names, revokes any credential and recovers backups</td></tr>
+<tr><td>Institution A</td><td>The authorised sample issuer Northstar Training</td></tr>
+<tr><td>Institution B</td><td>Harbour Academy, initially unauthorised, useful for the full authorisation flow</td></tr>
+<tr><td>Unauthorised visitor</td><td>Demonstrates rejection of actions without permission</td></tr>
+</tbody></table></div>
+<p><strong>Classroom demo</strong> sends actual local-chain transactions through unlocked development accounts. It does not fabricate browser results, but its publicly known test accounts are not a production identity system.</p>
+<p><strong>Signed in to local records</strong> and <strong>Authorised issuer</strong> mean different things. Signing in proves wallet control. A contract role determines whether the account can issue or administer. Signing in alone grants neither role.</p>
+<h2 id="section-129">5 Authorise Institution B</h2>
+<ol>
+<li>Open <strong>Administration</strong>.</li>
+<li>Select <strong>Administrator</strong> as the acting account.</li>
+<li>Select <strong>Use Institution B</strong> to fill its name and address.</li>
+<li>Check that the organisation is Harbour Academy and the address belongs to Institution B.</li>
+<li>Tick the off-chain identity and wallet confirmation. Classroom samples use fictional organisations.</li>
+<li>Select <strong>Authorise and save name</strong>.</li>
+<li>If required, the application first signs in to records management. Demo accounts can sign without an external extension prompt.</li>
+<li>Wait for <strong>Issuer authorised and organisation name recorded by the administrator.</strong></li>
+<li>The issuer list should show Harbour Academy as <strong>Authorised</strong>, with its name recorded by the administrator.</li>
+</ol>
+<p>If Institution B was already authorised in an earlier rehearsal, repeating the authorisation is harmless; it does not issue another credential.</p>
+<p>To update a name, select <strong>Edit name</strong>, update the top form, confirm the review again and submit. The name is off-chain metadata with an explicit source label, not proof that a company is legally established or that its claims are true.</p>
+<h2 id="section-145">6 Register a credential as Institution B</h2>
+<h3 id="section-147">Keep an original file</h3>
+<p>Download <strong>Original certificate PDF</strong> from Classroom samples and save it somewhere you can find, such as Downloads. Use fictional sample data for the first rehearsal.</p>
+<h3 id="section-151">Register</h3>
+<ol>
+<li>Open <strong>Issuer workspace</strong>.</li>
+<li>Select <strong>Institution B</strong> and check for <strong>Authorised issuer</strong>.</li>
+<li>Select the original PDF.</li>
+<li>Set a useful private title, such as <code>V2 demo certificate 001</code>.</li>
+<li>Review the automatically generated credential ID and commitment. You do not need to invent a salt.</li>
+<li>Select <strong>Register on-chain</strong>.</li>
+<li>The wallet signs in if necessary. The application first saves an encrypted verification-package backup locally, then submits the issuance transaction.</li>
+<li>Wait for the success message.</li>
+<li>Select <strong>Download verification JSON</strong>. The downloaded name starts with <code>verification-</code>.</li>
+</ol>
+<p>Keep both the original PDF and the JSON. The JSON does not contain a copy of the PDF.</p>
+<h3 id="section-165">Verify your new credential</h3>
+<ol>
+<li>Open <strong>Verify credentials</strong>.</li>
+<li>Choose the exact PDF used above.</li>
+<li>Select <strong>Import JSON</strong> and choose the downloaded package.</li>
+<li>The ID and salt fill automatically.</li>
+<li>Verify and expect <code>VALID</code>.</li>
+<li>The result includes the issuer name, address, registration time and name source.</li>
+</ol>
+<h3 id="section-174">If a transaction is cancelled or fails</h3>
+<p>V2 backs up verification data before submission. If backup succeeded but issuance was not completed:</p>
+<ol>
+<li>Open <strong>Credential records</strong> with the original issuing account.</li>
+<li>Select <strong>Sign in to local records</strong>, or the sign-in control in the list.</li>
+<li>Filter by <strong>Pending registration</strong>, or search by the private title.</li>
+<li>Find the record and select <strong>Complete registration</strong>.</li>
+<li>Confirm the transaction. Its status becomes <strong>Not revoked</strong>.</li>
+</ol>
+<p>Completion reuses the saved commitment and salt. Keep using the original PDF chosen for that pending record. A pending backup is not yet an on-chain credential; verification returns <code>NOT_FOUND</code> until issuance succeeds.</p>
+<h2 id="section-186">7 Search records and recover verification JSON</h2>
+<ol>
+<li>Open <strong>Credential records</strong>.</li>
+<li>Select Institution B and sign in to local records.</li>
+<li>Tick <strong>Only credentials issued by this account</strong>, or search by ID, issuer or your private title.</li>
+<li>Filter by <strong>Not revoked</strong>, <strong>Revoked</strong> or <strong>Pending registration</strong>.</li>
+<li>Each page contains up to ten records; use <strong>Previous</strong> and <strong>Next</strong>.</li>
+<li>Expand <strong>Registration and revocation history</strong> for actor, block, transaction hash, time and gas.</li>
+<li>If the downloaded JSON was lost, select <strong>Re-export verification package</strong>.</li>
+</ol>
+<p>Only the original issuer or an administrator can export the saved package. Another authorised issuer cannot export your backup. Ordinary verifiers only need the PDF and JSON provided by the holder; they do not need access to your private records service.</p>
+<p>Public listings show public on-chain IDs, addresses and status. Private titles, file names and salts are not exposed through the anonymous listing. Titles and file names are plaintext metadata in the local database; a person controlling that machine can still read them.</p>
+<p>If no backup was saved on this machine, the commitment cannot reconstruct the salt. Find the original package or follow the issuer process to issue a new credential.</p>
+<h2 id="section-202">8 Revoke your own credential</h2>
+<ol>
+<li>Find your newly issued credential in <strong>Credential records</strong> and select <strong>Copy credential ID</strong>.</li>
+<li>Open <strong>Issuer workspace</strong>, keeping Institution B selected.</li>
+<li>Paste the ID into <strong>Credential ID to revoke</strong>.</li>
+<li>Wait for the record preview. Check issuer, registration time and current status before proceeding.</li>
+<li>Tick the irreversible-revocation confirmation.</li>
+<li>Select <strong>Confirm revocation</strong> and wait for success.</li>
+<li>Verify the same original PDF and JSON again.</li>
+<li>Expect <code>REVOKED</code>.</li>
+</ol>
+<p>This prototype does not reinstate revoked credentials or overwrite an existing ID. Corrections require a new registration and a decision about revoking the old one.</p>
+<p>Deactivation and revocation are separate. Deactivating an issuer stops new issuance but does not automatically invalidate old credentials. The original address can still revoke its old credentials; compromised keys need a separate freeze and recovery policy.</p>
+<h2 id="section-217">9 Rehearse with a browser wallet</h2>
+<p>Use separate wallet identities for the roles. The administrator can initially remain a demo account while an institution uses a newly created test wallet. The current interface does not transfer administrator roles; you do not need that extra governance step for this demonstration.</p>
+<h3 id="section-221">Prepare a wallet</h3>
+<ol>
+<li>Use a browser supporting wallet extensions, such as Chrome or Edge. The Codex in-app browser may not have MetaMask installed.</li>
+<li>Install MetaMask through its official channel and create a wallet for coursework.</li>
+<li>Keep recovery information secure. This project asks only for addresses and signatures, never your recovery phrase or private key.</li>
+<li>Open the local website while the launch window remains running.</li>
+</ol>
+<p>Official wallet site: https://metamask.io/</p>
+<h3 id="section-230">Connect to the local network</h3>
+<ol>
+<li>In <strong>Issuer workspace</strong>, select <strong>Browser wallet</strong>.</li>
+<li>Select the intended account in the extension and approve the connection.</li>
+<li>If prompted to add or switch networks, check these values:</li>
+</ol>
+<div class="table-wrap"><table><thead><tr><th>Setting</th><th>Value</th></tr></thead><tbody>
+<tr><td>Network name</td><td>VeriLedger Local</td></tr>
+<tr><td>RPC URL</td><td>http://127.0.0.1:8545</td></tr>
+<tr><td>Chain ID</td><td>31337</td></tr>
+<tr><td>Currency symbol</td><td>ETH, local test currency only</td></tr>
+</tbody></table></div>
+<ol>
+<li>If switching fails, choose the local network manually in the wallet and reconnect.</li>
+<li>Check the address, role and test balance shown in the application. A new wallet may have zero funds and no issuance permission; that is expected.</li>
+</ol>
+<h3 id="section-246">Sign in and obtain test funds</h3>
+<ol>
+<li>Select <strong>Sign in to local records</strong>.</li>
+<li>Read the wallet message: website, address, chain, contract, deployment, expiry and one-time challenge.</li>
+<li>Confirm it is the local project sign-in message, then sign. This is not a transaction and has no gas fee.</li>
+<li>Select <strong>Get local test funds</strong>. If the balance is insufficient, the local test balance is set to 10 ETH. Requests are limited to once per minute.</li>
+<li>These funds have no real monetary value. Do not transfer real assets into the demonstration.</li>
+</ol>
+<h3 id="section-254">Have the administrator authorise your address</h3>
+<ol>
+<li>Copy your wallet address. The address is public and can be shared with the administrator.</li>
+<li>In a separate browser profile or window, or by switching to <strong>Classroom demo</strong>, choose Administrator.</li>
+<li>Open <strong>Administration</strong> and enter an organisation name, such as <code>Course wallet institution C</code>.</li>
+<li>Enter the actual wallet address, check it, tick the review confirmation and authorise it.</li>
+<li>Return to the institution wallet window. Refresh or wait for the role update and check for <strong>Authorised issuer</strong>.</li>
+</ol>
+<p>Switching accounts clears the local-records session. Sign in again for the new account; this is expected.</p>
+<h3 id="section-264">Issue using your wallet</h3>
+<ol>
+<li>Select the original PDF, enter a title and register it.</li>
+<li>Complete records sign-in if requested.</li>
+<li>Approve the separate on-chain transaction in your wallet after checking the network and operation.</li>
+<li>Wait for success and download the verification JSON.</li>
+<li>In another browser window, verify the PDF and JSON without connecting a wallet.</li>
+<li>Revoke through the issuer wallet and verify again to obtain <code>REVOKED</code>.</li>
+</ol>
+<p>The sign-in signature and transaction confirmation may be separate prompts. Finishing sign-in does not mean issuance succeeded.</p>
+<p>If you cancel the transaction, use the pending-registration flow in section 6. Sessions last up to 30 minutes and are cleared by restarting the service; simply sign in again when requested.</p>
+<h2 id="section-277">10 Stop normally and verify persistence</h2>
+<ol>
+<li>Keep the ID, original PDF and JSON for a credential you issued.</li>
+<li>Return to the launch terminal.</li>
+<li>Press Ctrl+C once.</li>
+<li>Wait for <code>Stopped. Your records will be restored on the next normal launch.</code></li>
+<li>Launch the same <code>start.command</code> again.</li>
+<li>Expect <code>Restored the existing contract, credentials and revocation records.</code></li>
+<li>Refresh the browser. Old records should remain.</li>
+<li>Verify using the previously downloaded PDF and JSON. The status should match the state before shutdown.</li>
+<li>Sign in again and confirm that re-export still works.</li>
+</ol>
+<p>Closing a browser tab does not stop services. A power failure or forced termination can lose the final unsaved snapshot interval, so always use normal shutdown after a presentation.</p>
+<p>V1 used an ephemeral chain. Already lost V1 chain state cannot be reconstructed from a PDF and JSON. V2 starts a new persistent environment. English and Chinese verification packages belong to separate deployments and are not interchangeable.</p>
+<h2 id="section-293">11 Back up and restore</h2>
+<h3 id="section-295">Create a complete backup</h3>
+<ol>
+<li>Stop the project normally.</li>
+<li>Double-click <code>backup.command</code>.</li>
+<li>Expect <code>Complete data backup created</code> and a backup location.</li>
+<li>Find the timestamped folder under this English project <code>backups/</code> directory.</li>
+<li>Copy that entire folder to a secure location if you need protection against computer failure.</li>
+</ol>
+<p>The backup includes the decryption key. Someone with the complete backup can recover saved verification data. Do not publish private backups with source code.</p>
+<h3 id="section-305">Restore an existing backup</h3>
+<ol>
+<li>Stop all services for this project.</li>
+<li>In Finder, rename the current <code>data</code> folder to something like <code>data-before-restore</code>; retain it for safety.</li>
+<li>Choose the complete timestamped <code>backup-...</code> or <code>reset-...</code> directory you want to restore.</li>
+<li>Copy it into the English project root and name the copy <code>data</code>.</li>
+<li>Check that <code>chain.json</code>, <code>deployment.json</code>, <code>registry.sqlite</code>, <code>vault.key</code> and <code>samples/</code> sit directly inside it, not inside another nested directory.</li>
+<li>Launch normally and check the restored records.</li>
+</ol>
+<p>Do not mix files from different backups or from the Chinese edition. The chain, deployment, database and encryption key must belong together.</p>
+<h2 id="section-316">12 Reset only when you want a new environment</h2>
+<p>Use reset only to deliberately return to a fresh demonstration. Do not reset merely because startup failed.</p>
+<ol>
+<li>Stop normally.</li>
+<li>Double-click <code>reset-demo.command</code>.</li>
+<li>Read the explanation. To proceed, type <code>RESET ENGLISH</code> exactly and press Enter.</li>
+<li>Existing data moves into <code>backups/reset-...</code>; it is not directly deleted.</li>
+<li>The next launch creates a new chain and deployment.</li>
+<li>Old verification JSON belongs to the old deployment. Register new credentials, or restore the complete old dataset.</li>
+</ol>
+<p>Any other confirmation text cancels the reset. The command does not operate on the neighbouring Chinese project.</p>
+<h2 id="section-329">13 Troubleshooting</h2>
+<div class="table-wrap"><table><thead><tr><th>Problem</th><th>What to do</th></tr></thead><tbody>
+<tr><td>Port already in use</td><td>Stop the existing Chinese or English launch window; do not run both default launchers together</td></tr>
+<tr><td>Still connecting</td><td>Wait for startup to finish, keep the launch window running, check the URL and select Reconnect</td></tr>
+<tr><td>Node not found</td><td>Install Node.js 24 LTS and reopen Terminal; this Mac can also use the prepared launcher</td></tr>
+<tr><td>Backup exists but registration failed</td><td>Sign in to Credential records, filter Pending registration and complete it</td></tr>
+<tr><td>No issuance permission</td><td>Have the administrator authorise the current wallet; check that the correct account is selected</td></tr>
+<tr><td>Cannot export a package</td><td>Use the original issuer or administrator and sign in again</td></tr>
+<tr><td>Session expired</td><td>Sign in and retry; another account does not inherit your session</td></tr>
+<tr><td>Original PDF mismatches</td><td>Check whether the file was re-exported, the salt is wrong or the ID belongs to another credential</td></tr>
+<tr><td>Package belongs to another deployment</td><td>Do not mix editions or pre-reset packages; restore the matching dataset or register again</td></tr>
+<tr><td>Wallet prompt does not appear</td><td>Check the extension for a pending request, dismiss stale requests and retry in a compatible browser</td></tr>
+<tr><td>Wallet balance or nonce looks wrong</td><td>Confirm the network; after a reset, follow wallet guidance to clear activity for the test network, without deleting wallet recovery information</td></tr>
+<tr><td>Last operation missing after a forced stop</td><td>Check chain status and pending backups; use normal shutdown in future</td></tr>
+<tr><td>SQLite experimental warning</td><td>Some Node versions display a warning; if startup completes normally, continue. Node 24 LTS is recommended</td></tr>
+<tr><td>Key/deployment mismatch</td><td>Stop services and restore a complete backup rather than deleting random data files</td></tr>
+</tbody></table></div>
+<h2 id="section-348">14 Suggested classroom presentation</h2>
+<ol>
+<li>Explain the issuer, holder and employer problem.</li>
+<li>Show on-chain versus off-chain data.</li>
+<li>Verify the original as VALID and the altered PDF as HASH_MISMATCH.</li>
+<li>Authorise Institution B and issue its own credential.</li>
+<li>Download the package and verify in an independent window.</li>
+<li>Show records, issuer names, history and gas.</li>
+<li>Revoke, then obtain REVOKED using the same PDF and JSON.</li>
+<li>Stop and restart to demonstrate persistence.</li>
+<li>Show tests for unauthorised actions and signed-session permissions.</li>
+<li>Discuss truth of the underlying experience, administrator trust, salts, compromised keys and single-node limitations.</li>
+</ol>
+<p>Rehearse the real MetaMask extension on the presentation computer and prepare a recording. Automated independent-key and EIP-1193 tests validate the protocol, not the real extension installation, prompts and account/network selection on that device.</p></article></main></body></html>

@@ -1,0 +1,32 @@
+{
+  "name": "credential-ledger",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22.13.0" },
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "compile": "hardhat compile",
+    "test": "node scripts/test.mjs",
+    "test:unit": "node --test test/hashing.test.mjs",
+    "build": "node scripts/build-guide.mjs && vite build",
+    "chain": "hardhat node --hostname 127.0.0.1",
+    "deploy": "node scripts/deploy.mjs",
+    "fund": "node scripts/fund-wallet.mjs",
+    "benchmark": "node scripts/benchmark.mjs",
+    "web": "vite --host 127.0.0.1"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "5.4.0",
+    "ethers": "6.17.0",
+    "lucide-react": "0.468.0",
+    "react": "19.2.0",
+    "react-dom": "19.2.0"
+  },
+  "devDependencies": {
+    "@foundry-rs/anvil": "1.7.1",
+    "hardhat": "3.22.0",
+    "solc": "0.8.28",
+    "vite": "7.2.2"
+  }
+}

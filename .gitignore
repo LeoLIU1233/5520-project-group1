@@ -1,0 +1,13 @@
+node_modules/
+.pnpm-store/
+.npm-cache/
+artifacts/
+cache/
+dist/
+.local/
+data/
+backups/
+frontend/public/deployment.json
+frontend/public/samples/*.json
+.DS_Store
+~$*

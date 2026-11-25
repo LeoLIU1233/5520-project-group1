@@ -1,0 +1,72 @@
+{
+  "measuredAt": "2026-11-24T10:59:29.666Z",
+  "runtime": "v24.22.1",
+  "platform": "darwin",
+  "arch": "arm64",
+  "network": "isolated Hardhat local chain; not a public-network benchmark",
+  "warmup": "one issuance and revocation excluded to initialise counters",
+  "hashRepetitions": 5,
+  "queryRepetitions": 10,
+  "sizes": [
+    {
+      "bytes": 1024,
+      "hashMedianMs": 0.193,
+      "queryMedianMs": 14.292,
+      "issueGas": "99032",
+      "revokeGas": "36999"
+    },
+    {
+      "bytes": 102400,
+      "hashMedianMs": 7.599,
+      "queryMedianMs": 13.645,
+      "issueGas": "99032",
+      "revokeGas": "36999"
+    },
+    {
+      "bytes": 1048576,
+      "hashMedianMs": 60.59,
+      "queryMedianMs": 12.017,
+      "issueGas": "99032",
+      "revokeGas": "36999"
+    },
+    {
+      "bytes": 5242880,
+      "hashMedianMs": 305.463,
+      "queryMedianMs": 12.424,
+      "issueGas": "99032",
+      "revokeGas": "36999"
+    }
+  ],
+  "cases": [
+    {
+      "name": "Original PDF",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "PDF with altered dates",
+      "expected": 1,
+      "actual": 1,
+      "pass": true
+    },
+    {
+      "name": "Incorrect salt",
+      "expected": 1,
+      "actual": 1,
+      "pass": true
+    },
+    {
+      "name": "Unknown ID",
+      "expected": 3,
+      "actual": 3,
+      "pass": true
+    },
+    {
+      "name": "Original PDF after revocation",
+      "expected": 2,
+      "actual": 2,
+      "pass": true
+    }
+  ]
+}
